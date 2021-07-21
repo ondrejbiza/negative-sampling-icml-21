@@ -43,10 +43,6 @@ class ContrastiveSWM(nn.Module):
         num_channels = input_dims[0]
         width_height = input_dims[1:]
 
-        if self.use_coord_grid:
-            # grid of (x,y) coordinates
-            num_channels += 2
-
         if encoder == 'small':
             self.obj_extractor = EncoderCNNSmall(
                 input_dim=num_channels,
@@ -233,14 +229,6 @@ class ContrastiveSWM(nn.Module):
         self.neg_loss = self.neg_loss.mean()
 
     def forward(self, obs):
-
-        if self.use_coord_grid:
-
-            if obs.device != self.coord_grid.device:
-                self.coord_grid = self.coord_grid.to(obs.device)
-
-            x = self.coord_grid.expand(obs.size(0), -1, -1, -1)
-            obs = torch.cat([obs, x], dim=1)
 
         return self.obj_encoder(self.obj_extractor(obs))
 
