@@ -1,4 +1,4 @@
-# Negative samling in C-SWM
+# Negative sampling in C-SWM
 
 This is the original source code for "The Impact of Negative Sampling on Contrastive Structured World Models. O Biza, E van der Pol, T Kipf. ICML'21 SSL workshop."
 
@@ -21,25 +21,25 @@ The size of all (uncompressed) datasets is around 40 GB.
 
 ```
 # Shapes and Cubes immovable
-python data_gen/env.py --env_id ShapesImmovableTrain-v0 --fname data/shapes_imm_train.h5 --num_episodes 1000 --seed 1
-python data_gen/env.py --env_id ShapesImmovableEval-v0 --fname data/shapes_imm_eval.h5 --num_episodes 10000 --seed 2 --save-state-ids
+python -m ns.data_gen.env --env_id ShapesImmovableTrain-v0 --fname data/shapes_imm_train.h5 --num_episodes 1000 --seed 1
+python -m ns.data_gen.env --env_id ShapesImmovableEval-v0 --fname data/shapes_imm_eval.h5 --num_episodes 10000 --seed 2 --save-state-ids
 
-python data_gen/env.py --env_id CubesImmovableTrain-v0 --fname data/cubes_imm_train.h5 --num_episodes 1000 --seed 3
-python data_gen/env.py --env_id CubesImmovableEval-v0 --fname data/cubes_imm_eval.h5 --num_episodes 10000 --seed 4 --save-state-ids
+python -m ns.data_gen.env --env_id CubesImmovableTrain-v0 --fname data/cubes_imm_train.h5 --num_episodes 1000 --seed 3
+python -m ns.data_gen.env --env_id CubesImmovableEval-v0 --fname data/cubes_imm_eval.h5 --num_episodes 10000 --seed 4 --save-state-ids
 
 # Atari Pong and Space Invaders
-python data_gen/env.py --env_id PongDeterministic-v4 --fname data/pong_train.h5 --num_episodes 1000 --atari --seed 1
-python data_gen/env.py --env_id PongDeterministic-v4 --fname data/pong_eval.h5 --num_episodes 100 --atari --seed 2 --save-state-ids
+python -m ns.data_gen.env --env_id PongDeterministic-v4 --fname data/pong_train.h5 --num_episodes 1000 --atari --seed 1
+python -m ns.data_gen.env --env_id PongDeterministic-v4 --fname data/pong_eval.h5 --num_episodes 100 --atari --seed 2 --save-state-ids
 
-python data_gen/env.py --env_id SpaceInvadersDeterministic-v4 --fname data/spaceinvaders_train.h5 --num_episodes 1000 --atari --seed 1
-python data_gen/env.py --env_id SpaceInvadersDeterministic-v4 --fname data/spaceinvaders_eval.h5 --num_episodes 100 --atari --seed 2 --save-state-ids
+python -m ns.data_gen.env --env_id SpaceInvadersDeterministic-v4 --fname data/spaceinvaders_train.h5 --num_episodes 1000 --atari --seed 1
+python -m ns.data_gen.env --env_id SpaceInvadersDeterministic-v4 --fname data/spaceinvaders_eval.h5 --num_episodes 100 --atari --seed 2 --save-state-ids
 ```
 
 ## Generate Atari dataset with A3C
 
 These datasets are used in Section 4.3 in the paper.
 
-First train A3C on Pong and Space Invaders. A3C is trained on CPUs in parallel. This took around a day on a high-end CPU.
+First train A3C on Pong and Space Invaders. A3C is trained on a CPU in parallel. This took around a day on a high-end CPU for each game.
 
 ```
 python -m a3c.baby_a3c --env PongDeterministic-v4
@@ -88,14 +88,14 @@ Pong and Space Invaders: baseline vs time-aligned negatives (Section 4.2).
 python -m ns.scr.train --dataset data/pong_train.h5 --encoder medium --embedding-dim 4 --action-dim 6 --num-objects 3 --copy-action --epochs 200 --name pong
 python -m ns.scr.eval_ids --dataset data/pong_eval.h5 --save-folder checkpoints/pong --num-steps 1
 
-python -m ns.scr.train --dataset data/spaceinvaders_train.h5 --encoder medium --embedding-dim 4 --action-dim 6 --num-objects 3 --copy-action --epochs 200 --name spaceinvaders
+python -m ns.scr.train --dataset data/spaceinvaders_train.h5 --encoder medium --embedding-dim 4 --action-dim 6 --num-objects 5 --copy-action --epochs 200 --name spaceinvaders
 python -m ns.scr.eval_ids --dataset data/spaceinvaders_eval.h5 --save-folder checkpoints/spaceinvaders --num-steps 1
 
 # time-aligned negatives
 python -m ns.scr.train --dataset data/pong_train.h5 --encoder medium --embedding-dim 4 --action-dim 6 --num-objects 3 --copy-action --epochs 200 --name pong_neg --custom-neg --in-ep-prob 0.0
 python -m ns.scr.eval_ids --dataset data/pong_eval.h5 --save-folder checkpoints/pong_neg --num-steps 1
 
-python -m ns.scr.train --dataset data/spaceinvaders_train.h5 --encoder medium --embedding-dim 4 --action-dim 6 --num-objects 3 --copy-action --epochs 200 --name spaceinvaders_neg --custom-neg --in-ep-prob 0.0
+python -m ns.scr.train --dataset data/spaceinvaders_train.h5 --encoder medium --embedding-dim 4 --action-dim 6 --num-objects 5 --copy-action --epochs 200 --name spaceinvaders_neg --custom-neg --in-ep-prob 0.0
 python -m ns.scr.eval_ids --dataset data/spaceinvaders_eval.h5 --save-folder checkpoints/spaceinvaders_neg --num-steps 1
 ```
 
@@ -104,21 +104,21 @@ Full Pong and Space Invaders: baseline vs episodic and out-of-episode negatives 
 ```
 # baseline
 python -m ns.scr.train --dataset data/pong_full_train_eps_0_5.h5 --encoder medium --embedding-dim 4 --action-dim 6 --num-objects 3 --copy-action --epochs 100 --name pong_full --learning-rate 0.0005
-python -m ns.scr.eval_ids_b --dataset data/pong_full_test_dup_eps_0_5.h5 --save-folder checkpoints/pong_full --num-steps 1 --dedup
-python -m ns.scr.eval_ids_b_inep --dataset data/pong_full_test_dup_eps_0_5.h5 --save-folder checkpoints/pong_full --num-steps 1 --dedup
+python -m ns.scr.eval_ids_b --dataset data/pong_full_test_dup_eps_0_5.h5 --save-folder checkpoints/pong_full --num-steps 1 --dedup # global eval
+python -m ns.scr.eval_ids_b_inep --dataset data/pong_full_test_dup_eps_0_5.h5 --save-folder checkpoints/pong_full --num-steps 1 --dedup # local eval
 
 python -m ns.scr.train --dataset data/spaceinvaders_full_train_eps_0_5.h5 --encoder medium --embedding-dim 4 --action-dim 6 --num-objects 5 --copy-action --epochs 100 --name spaceinvaders_full --learning-rate 0.0005
-python -m ns.scr.eval_ids_b --dataset data/spaceinvaders_full_test_dup_eps_0_5.h5 --save-folder checkpoints/spaceinvaders_full --num-steps 1 --dedup
-python -m ns.scr.eval_ids_b_inep --dataset data/spaceinvaders_full_test_dup_eps_0_5.h5 --save-folder checkpoints/spaceinvaders_full --num-steps 1 --dedup
+python -m ns.scr.eval_ids_b --dataset data/spaceinvaders_full_test_dup_eps_0_5.h5 --save-folder checkpoints/spaceinvaders_full --num-steps 1 --dedup # global eval
+python -m ns.scr.eval_ids_b_inep --dataset data/spaceinvaders_full_test_dup_eps_0_5.h5 --save-folder checkpoints/spaceinvaders_full --num-steps 1 --dedup # local eval
 
 # episodic and out-of-episode negatives (beta=0.5)
 python -m ns.scr.train --dataset data/pong_full_train_eps_0_5.h5 --encoder medium --embedding-dim 4 --action-dim 6 --num-objects 3 --copy-action --epochs 100 --name pong_full_neg --learning-rate 0.0005 --custom-neg --disable-time-aligned
-python -m ns.scr.eval_ids_b --dataset data/pong_full_test_dup_eps_0_5.h5 --save-folder checkpoints/pong_full_neg --num-steps 1 --dedup
-python -m ns.scr.eval_ids_b_inep --dataset data/pong_full_test_dup_eps_0_5.h5 --save-folder checkpoints/pong_full_neg --num-steps 1 --dedup
+python -m ns.scr.eval_ids_b --dataset data/pong_full_test_dup_eps_0_5.h5 --save-folder checkpoints/pong_full_neg --num-steps 1 --dedup # global eval
+python -m ns.scr.eval_ids_b_inep --dataset data/pong_full_test_dup_eps_0_5.h5 --save-folder checkpoints/pong_full_neg --num-steps 1 --dedup # local eval
 
 python -m ns.scr.train --dataset data/spaceinvaders_full_train_eps_0_5.h5 --encoder medium --embedding-dim 4 --action-dim 6 --num-objects 5 --copy-action --epochs 100 --name spaceinvaders_full_neg --learning-rate 0.0005 --custom-neg --disable-time-aligned
-python -m ns.scr.eval_ids_b --dataset data/spaceinvaders_full_test_dup_eps_0_5.h5 --save-folder checkpoints/spaceinvaders_full_neg --num-steps 1 --dedup
-python -m ns.scr.eval_ids_b_inep --dataset data/spaceinvaders_full_test_dup_eps_0_5.h5 --save-folder checkpoints/spaceinvaders_full_neg --num-steps 1 --dedup
+python -m ns.scr.eval_ids_b --dataset data/spaceinvaders_full_test_dup_eps_0_5.h5 --save-folder checkpoints/spaceinvaders_full_neg --num-steps 1 --dedup # global eval
+python -m ns.scr.eval_ids_b_inep --dataset data/spaceinvaders_full_test_dup_eps_0_5.h5 --save-folder checkpoints/spaceinvaders_full_neg --num-steps 1 --dedup # local eval
 ```
 
 # Code structure
@@ -128,7 +128,7 @@ python -m ns.scr.eval_ids_b_inep --dataset data/spaceinvaders_full_test_dup_eps_
 * C-SWM is implemented in */ns/modules.py* and trained using */ns/scr/train.py*.
 * There are four evaluation scripts in */scr*: eval.py comes from the original C-SWM source code; 
 eval_ids.py checks for duplicate states, which cause the evaluation score to be lower than it should be;
-  eval_ids_b.py partitions the evaluation set into batches and perform evaluation on each batch separately
+  eval_ids_b.py partitions the evaluation set into batches and performs evaluation on each batch separately
   (which changes the score due to the number of states C-SWM ranks);
   eval_ids_b_inep.py evaluates the model's ability to distinguish states within a single episode (called "local" score in the paper).
 
