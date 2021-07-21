@@ -1,0 +1,9 @@
+__pycache__
+*.py[cod]
+*$py.class
+
+pongdeterministic-v4/
+spaceinvadersdeterministic-v4/
+
+data/
+.idea
