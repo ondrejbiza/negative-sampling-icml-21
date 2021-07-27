@@ -2,6 +2,8 @@
 
 This is the original source code for "The Impact of Negative Sampling on Contrastive Structured World Models. O Biza, E van der Pol, T Kipf. ICML'21 SSL workshop."
 
+Paper link: https://arxiv.org/abs/2107.11676
+
 We build upon the original C-SWM source code (/ns, https://github.com/tkipf/c-swm, MIT license) and use an open-source implementation of A3C (/a3c, https://github.com/greydanus/baby-a3c, MIT license).
 
 ## Setup
