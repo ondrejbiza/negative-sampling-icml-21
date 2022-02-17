@@ -57,8 +57,8 @@ python -m a3c.scr.collect PongDeterministic-v4 --min-burnin 58 --max-burnin 100 
 python -m a3c.scr.collect PongDeterministic-v4 --min-burnin 58 --max-burnin 100 --max-episodes 1000 --num-steps 10 --save-path data/pong_full_test_dup_eps_0_5.h5 --seed 3 --check-dup-paths data/pong_full_train_eps_0_5.h5 data/pong_full_valid_dup_eps_0_5.h5 --eps 0.5
 
 python -m a3c.scr.collect SpaceInvadersDeterministic-v4 --min-burnin 50 --max-burnin 300 --max-episodes 10000 --num-steps 10 --save-path data/spaceinvaders_full_train_eps_0_5.h5 --seed 1 --eps 0.5
-python -m a3c.scr.collect SpaceInvadersDeterministic-v4 --min-burnin 50 --max-burnin 300 --max-episodes 1000 --num-steps 10 --save-path data/spaceinvaders_full_valid_dup_eps_0_5.h5 --seed 2 --check-dup-paths data/spaceinvaders_full_train.h5 --eps 0.5
-python -m a3c.scr.collect SpaceInvadersDeterministic-v4 --min-burnin 50 --max-burnin 300 --max-episodes 1000 --num-steps 10 --save-path data/spaceinvaders_full_test_dup_eps_0_5.h5 --seed 3 --check-dup-paths data/spaceinvaders_full_train.h5 data/spaceinvaders_full_valid_dup.h5 --eps 0.5
+python -m a3c.scr.collect SpaceInvadersDeterministic-v4 --min-burnin 50 --max-burnin 300 --max-episodes 1000 --num-steps 10 --save-path data/spaceinvaders_full_valid_dup_eps_0_5.h5 --seed 2 --check-dup-paths data/spaceinvaders_full_train_eps_0_5.h5 --eps 0.5
+python -m a3c.scr.collect SpaceInvadersDeterministic-v4 --min-burnin 50 --max-burnin 300 --max-episodes 1000 --num-steps 10 --save-path data/spaceinvaders_full_test_dup_eps_0_5.h5 --seed 3 --check-dup-paths data/spaceinvaders_full_train_eps_0_5.h5 data/spaceinvaders_full_valid_dup_eps_0_5.h5 --eps 0.5
 ```
 
 ## Train models
